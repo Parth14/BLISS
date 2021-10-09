@@ -28,20 +28,20 @@ def Fsail(t,s,cone):
     asaily = asail*math.sin(theta+cone)
     return [s[2], s[3], asunx+asailx, asuny+asaily]
 
-t_vals = [5e7/100 * x for x in range(100)]
-t_sail = [5e6/10 * x for x in range(10)]
+t_vals = [6e7/100 * x for x in range(100)]
+t_sail = [6e6/10 * x for x in range(10)]
 
-venus = solve_ivp(Fsun, [0, 5e7], [0.72*AU, 0, 0, 35], rtol=1e-8, t_eval=t_vals)
-earth = solve_ivp(Fsun, [0, 5e7], [AU, 0, 0, 30], rtol=1e-8, t_eval=t_vals)
-mars = solve_ivp(Fsun, [0, 5e7], [1.5*AU, 0, 0, 24], rtol=1e-8, t_eval=t_vals)
+venus = solve_ivp(Fsun, [0, 6e7], [0.72*AU, 0, 0, 35], rtol=1e-8, t_eval=t_vals)
+earth = solve_ivp(Fsun, [0, 6e7], [AU, 0, 0, 30], rtol=1e-8, t_eval=t_vals)
+mars = solve_ivp(Fsun, [0, 6e7], [1.5*AU, 0, 0, 24], rtol=1e-8, t_eval=t_vals)
 
 sail_in_x = []
 sail_in_y = []
 count = 0
-angle = -1
+angle = float(input("Enter the initial cone angle: "))
+increment = abs(float(input("Enter cone angle increment: ")))
 
-prev_sail = solve_ivp(Fsail, [0, 5e7], [AU, 0, 0, 30], rtol=1e-8, args=[-1], t_eval=t_vals)
-print(prev_sail.t)
+prev_sail = solve_ivp(Fsail, [0, 6e7], [AU, 0, 0, 30], rtol=1e-8, args=[angle], t_eval=t_vals)
 sail_in_x.append(prev_sail.y[0][0])
 sail_in_y.append(prev_sail.y[1][0])
 
@@ -53,12 +53,12 @@ def keyclick(event):
     global t_vals
     
     if event.key == 'left':
-        angle += -0.05
+        angle -= increment
     elif event.key == 'right':
-        angle += 0.05
+        angle += increment
 
     print(angle)
-    current_sail = solve_ivp(Fsail, [0, 5e6], [prev_sail.y[0][1], prev_sail.y[1][1], prev_sail.y[2][1], prev_sail.y[3][1],], rtol=1e-8, args=[angle], t_eval=t_sail)
+    current_sail = solve_ivp(Fsail, [0, 6e6], [prev_sail.y[0][1], prev_sail.y[1][1], prev_sail.y[2][1], prev_sail.y[3][1],], rtol=1e-8, args=[angle], t_eval=t_sail)
 
     sail_in_x.append(current_sail.y[0][0])
     sail_in_y.append(current_sail.y[1][0])
