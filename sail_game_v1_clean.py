@@ -34,13 +34,8 @@ venus = solve_ivp(Fsun, [0, 5e7], [0.72*AU, 0, 0, 35], rtol=1e-8, t_eval=t_vals)
 earth = solve_ivp(Fsun, [0, 5e7], [AU, 0, 0, 30], rtol=1e-8, t_eval=t_vals)
 mars = solve_ivp(Fsun, [0, 5e7], [1.5*AU, 0, 0, 24], rtol=1e-8, t_eval=t_vals)
 
-venus_x = []
-venus_y = []
-earth_x = []
-earth_y = []
-
-sail_in_x = [0]
-sail_in_y = [0]
+sail_in_x = []
+sail_in_y = []
 count = 0
 angle = -1
 
@@ -60,8 +55,6 @@ def keyclick(event):
         angle += -0.05
     elif event.key == 'right':
         angle += 0.05
-    elif event.key == 'up':
-        angle += 0.0
 
     print(angle)
     current_sail = solve_ivp(Fsail, [0, 5e5], [prev_sail.y[0][1], prev_sail.y[1][1], prev_sail.y[2][1], prev_sail.y[3][1],], rtol=1e-8, args=[angle], t_eval=[0, 5e5])
@@ -75,7 +68,7 @@ def keyclick(event):
     plt.plot(earth.y[0][:count], earth.y[1][:count])
     plt.plot(venus.y[0][:count], venus.y[1][:count]) 
     plt.plot(mars.y[0][:count],  mars.y[1][:count]) 
-    plt.plot(sail_in_x[1:], sail_in_y[1:])
+    plt.plot(sail_in_x, sail_in_y)
     plt.draw()
     prev_sail = current_sail
     count += 1
