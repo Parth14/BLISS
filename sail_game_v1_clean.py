@@ -64,13 +64,38 @@ def keyclick(event):
     sail_in_y.append(current_sail.y[1][0])
 
     plt.clf()
+    #rectangle to adjust axis
     plt.plot([-2.5e8, -2.5e8, 2.5e8, 2.5e8, -2.5e8], [-2.5e8, 2.5e8, 2.5e8, -2.5e8, -2.5e8], color="white")
-    plt.plot(earth.y[0][:count], earth.y[1][:count], color="blue")
-    plt.plot(venus.y[0][:count], venus.y[1][:count], color="yellow") 
-    plt.plot(mars.y[0][:count],  mars.y[1][:count], color="red") 
-    plt.plot(sail_in_x, sail_in_y, color="black") #current sail path
+
+    #sun
+    sun = plt.Circle((0, 0), 5e6, color='yellow')
+    plt.gca().add_patch(sun)
+
+    #planets full orbit
+    plt.plot(earth.y[0], earth.y[1], color="brown")
+    plt.plot(venus.y[0], venus.y[1], color="brown") 
+    plt.plot(mars.y[0],  mars.y[1], color="brown") 
+
+    #planets current
+    earth_ball = plt.Circle((earth.y[0][count], earth.y[1][count]), 5e6, color='blue')
+    plt.gca().add_patch(earth_ball)
+
+    venus_ball = plt.Circle((venus.y[0][count], venus.y[1][count]), 5e6, color='orange')
+    plt.gca().add_patch(venus_ball)
+
+    mars_ball = plt.Circle((mars.y[0][count], mars.y[1][count]), 5e6, color='red')
+    plt.gca().add_patch(mars_ball)
+
+    #current sail path
+    plt.plot(sail_in_x, sail_in_y, color="black") 
+    sail_ball = plt.Circle((sail_in_x[-1], sail_in_y[-1]), 5e6, color='black')
+    plt.gca().add_patch(sail_ball)
+
+    #sail future tracjectory with current angle
     plt.plot(current_sail.y[0], current_sail.y[1], color="gray")
+    
     plt.draw()
+
     prev_sail = current_sail
     count += 1
 
