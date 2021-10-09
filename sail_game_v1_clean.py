@@ -29,6 +29,7 @@ def Fsail(t,s,cone):
     return [s[2], s[3], asunx+asailx, asuny+asaily]
 
 t_vals = [5e7/100 * x for x in range(100)]
+t_sail = [5e6/10 * x for x in range(10)]
 
 venus = solve_ivp(Fsun, [0, 5e7], [0.72*AU, 0, 0, 35], rtol=1e-8, t_eval=t_vals)
 earth = solve_ivp(Fsun, [0, 5e7], [AU, 0, 0, 30], rtol=1e-8, t_eval=t_vals)
@@ -57,18 +58,18 @@ def keyclick(event):
         angle += 0.05
 
     print(angle)
-    current_sail = solve_ivp(Fsail, [0, 5e5], [prev_sail.y[0][1], prev_sail.y[1][1], prev_sail.y[2][1], prev_sail.y[3][1],], rtol=1e-8, args=[angle], t_eval=[0, 5e5])
+    current_sail = solve_ivp(Fsail, [0, 5e6], [prev_sail.y[0][1], prev_sail.y[1][1], prev_sail.y[2][1], prev_sail.y[3][1],], rtol=1e-8, args=[angle], t_eval=t_sail)
 
     sail_in_x.append(current_sail.y[0][0])
     sail_in_y.append(current_sail.y[1][0])
 
-
     plt.clf()
     plt.plot([-2.5e8, -2.5e8, 2.5e8, 2.5e8, -2.5e8], [-2.5e8, 2.5e8, 2.5e8, -2.5e8, -2.5e8], color="white")
-    plt.plot(earth.y[0][:count], earth.y[1][:count])
-    plt.plot(venus.y[0][:count], venus.y[1][:count]) 
-    plt.plot(mars.y[0][:count],  mars.y[1][:count]) 
-    plt.plot(sail_in_x, sail_in_y)
+    plt.plot(earth.y[0][:count], earth.y[1][:count], color="blue")
+    plt.plot(venus.y[0][:count], venus.y[1][:count], color="yellow") 
+    plt.plot(mars.y[0][:count],  mars.y[1][:count], color="red") 
+    plt.plot(sail_in_x, sail_in_y, color="black") #current sail path
+    plt.plot(current_sail.y[0], current_sail.y[1], color="gray")
     plt.draw()
     prev_sail = current_sail
     count += 1
